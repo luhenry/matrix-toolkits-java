@@ -21,4 +21,10 @@ public interface ISparseVector extends Vector {
      * Number of entries used in the sparse structure
      */
     public int getUsed();
+    
+    
+    /**
+     * Compacts the vector
+     */
+    public void compact();
 }
