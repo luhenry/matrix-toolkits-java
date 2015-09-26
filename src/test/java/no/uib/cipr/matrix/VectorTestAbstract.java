@@ -175,7 +175,9 @@ public abstract class VectorTestAbstract extends TestCase {
      */
     public void testAddDoubleVector() {
         double alpha = Math.random();
-        assertEquals(add(alpha, yd), x.add(alpha, y));
+        double[] a = add(alpha, yd);
+        Vector b = x.add(alpha, y);
+        assertEquals(a, b);
     }
 
     /*

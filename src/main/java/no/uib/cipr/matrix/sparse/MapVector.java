@@ -181,15 +181,7 @@ public class MapVector extends AbstractVector implements ISparseVector{
 
 	@Override
 	public int[] getIndex() {
-		int[] index = new int[map.size()];
-		int i = 0;
-		
-		for(Entry<Integer, Double> e: map.entrySet()){
-			index[i++] = e.getKey();
-		}
-		Arrays.sort(index);
-		
-		return index;
+		return map.entrySet().stream().sorted().mapToInt(e -> e.getKey()).toArray();
 	}
 
 	@Override
@@ -209,6 +201,15 @@ public class MapVector extends AbstractVector implements ISparseVector{
 		map.clear();
 		map.putAll(newMap);
 
+	}
+
+	@Override
+	public double[] getData() {
+		return map.entrySet()
+				.stream()
+				.sorted((e1, e2) -> e1.getKey().compareTo(e2.getKey()))
+				.mapToDouble(e -> e.getValue())
+				.toArray();
 	}
 
 }

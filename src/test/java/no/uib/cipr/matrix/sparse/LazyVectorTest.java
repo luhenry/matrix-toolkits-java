@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.TreeMap;
+import java.util.function.Function;
 
 import no.uib.cipr.matrix.DenseVector;
 import no.uib.cipr.matrix.Vector;
@@ -182,8 +183,8 @@ public class LazyVectorTest extends VectorTestAbstract {
     public void testPerformance(int fill){
     	
     	int size = fill*10;
-    	int mult = 1;
-    	int loops = 100000;
+    	double mult = 0.1;
+    	int loops = 1000000;
     	
     	while(loops*(long)(fill) > 1E7){
     		loops /= 2;
@@ -201,74 +202,33 @@ public class LazyVectorTest extends VectorTestAbstract {
     		}
     	}
     	
-//    	int warmUp = Math.min(100000, loops);
-//    	for(int i = 0; i < warmUp; i++){
-//    		LazyVector lv = new LazyVector(size);
-//    		SparseVector sv = new SparseVector(size);
-//    		MapVector hv = new MapVector(size, HashMap::new);
-//    		MapVector tv = new MapVector(size, TreeMap::new);
-//    		for(int f = 0; f < fill; f++){
-//    			lv.set(index[i%loops][f], data[i%loops][f]);
-//    			sv.set(index[i%loops][f], data[i%loops][f]);
-//    			hv.set(index[i%loops][f], data[i%loops][f]);
-//    			tv.set(index[i%loops][f], data[i%loops][f]);
-//    		}
-//    	}
 
-
-    	long lazyStart = System.nanoTime();
-    	for(int i = 0; i < loops; i++){
-    		LazyVector lv = new LazyVector(size);
-    		for(int f = 0; f < fill; f++){
-    			lv.set(index[i][f], data[i][f]);
-    		}
-    		//lv.compact();
-    	}
-    	long lazyEnd = System.nanoTime();
+    	long sparse = trial(index, data, size, SparseVector::new);
+    	long lazy = trial(index, data, size, LazyVector::new);
+    	long hash = trial(index, data, size, i -> new MapVector(i, HashMap::new));
+    	long tree = trial(index, data, size, i -> new MapVector(i, TreeMap::new));
     	
-    	long sparseStart = System.nanoTime();
-    	for(int i = 0; i < loops; i++){
-    		SparseVector sv = new SparseVector(size);
-    		for(int f = 0; f < fill; f++){
-    			sv.set(index[i][f], data[i][f]);
-    		}
-    		//sv.compact();
-    	}
-    	long sparseEnd = System.nanoTime();
     	
-    	long hashStart = System.nanoTime();
-    	for(int i = 0; i < loops; i++){
-    		MapVector hv = new MapVector(size, HashMap::new);
-    		for(int f = 0; f < fill; f++){
-    			hv.set(index[i][f], data[i][f]);
-    		}
-    		//hv.compact();
-    	}
-    	long hashEnd = System.nanoTime();
-
-    	
-    	long treeStart = System.nanoTime();
-    	for(int i = 0; i < loops; i++){
-    		MapVector tv = new MapVector(size, TreeMap::new);
-    		for(int f = 0; f < fill; f++){
-    			tv.set(index[i][f], data[i][f]);
-    		}
-    		//tv.compact();
-    	}
-    	long treeEnd = System.nanoTime();
-    	
-//    	System.out.printf("%d\t", fill);
-//    	System.out.printf("Sparse\t%f\t", mult*(sparseEnd - sparseStart)/1000000.0);
-//    	System.out.printf("Lazy\t%f\t", mult*(lazyEnd - lazyStart)/1000000.0);
-//    	System.out.printf("Hash\t%f\t", mult*(hashEnd - hashStart)/1000000.0);
-//    	System.out.printf("Tree\t%f\t", mult*(treeEnd - treeStart)/1000000.0);
     	System.out.printf("%d\t%f\t%f\t%f\t%f\t", 
     			fill, 
-    			mult*(sparseEnd - sparseStart)/1000000.0, 
-    			mult*(lazyEnd - lazyStart)/1000000.0,
-    			mult*(hashEnd - hashStart)/1000000.0,
-    			mult*(treeEnd - treeStart)/1000000.0);
+    			mult*(sparse)/1000000.0, 
+    			mult*(lazy)/1000000.0,
+    			mult*(hash)/1000000.0,
+    			mult*(tree)/1000000.0);
     	System.out.println();
     }
     
+    private long trial(int[][] index, double[][] data, int size, Function<Integer, ISparseVector> supplier){
+    	long start = System.nanoTime();
+    	for(int i = 0; i < index.length; i++){
+    		ISparseVector v = supplier.apply(size);
+    		for(int f = 0; f < index[i].length; f++){
+    			v.set(index[i][f], data[i][f]);
+    		}
+    		v.compact();
+    		//v.getData();
+    	}
+
+    	return System.nanoTime() - start;
+    }
 }
