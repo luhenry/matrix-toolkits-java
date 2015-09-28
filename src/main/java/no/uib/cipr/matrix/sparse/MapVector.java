@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.SortedMap;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 import java.util.Arrays;
 
 import no.uib.cipr.matrix.AbstractVector;
@@ -17,32 +19,32 @@ import no.uib.cipr.matrix.VectorEntry;
  */
 public class MapVector extends AbstractVector implements ISparseVector{
 
-	final Map<Integer, Double> map;
+	Map<Integer, Double> map;
 	Supplier<Map<Integer, Double>> supplier;
-	
-    public MapVector(int size) {
-        this(size, HashMap::new);
-    }
-	
-    public MapVector(int size, Supplier<Map<Integer, Double>> supplier) {
-        super(size);
-        this.supplier = supplier;
-        map = supplier.get();
-    }
-    
-    public MapVector(Vector x){
-    	this(x, HashMap::new);
-    }
-    
-    public MapVector(Vector x, Supplier<Map<Integer, Double>> supplier) {
-        super(x.size());
-        this.supplier = supplier;
-        map = supplier.get();
-        x.forEach(e ->{
-        	map.put(e.index(), e.get());
-        }); 
-    }
-	    
+
+	public MapVector(int size) {
+		this(size, HashMap::new);
+	}
+
+	public MapVector(int size, Supplier<Map<Integer, Double>> supplier) {
+		super(size);
+		this.supplier = supplier;
+		map = supplier.get();
+	}
+
+	public MapVector(Vector x){
+		this(x, HashMap::new);
+	}
+
+	public MapVector(Vector x, Supplier<Map<Integer, Double>> supplier) {
+		super(x.size());
+		this.supplier = supplier;
+		map = supplier.get();
+		x.forEach(e ->{
+			map.put(e.index(), e.get());
+		}); 
+	}
+
 	public int size() {
 		return map.size();
 	}
@@ -73,9 +75,9 @@ public class MapVector extends AbstractVector implements ISparseVector{
 
 	@Override
 	public Vector zero() {
-//		for(Entry<Integer, Double> e: map.entrySet()){
-//			e.setValue(0.0);
-//		}
+		//		for(Entry<Integer, Double> e: map.entrySet()){
+		//			e.setValue(0.0);
+		//		}
 		map.clear();
 		return this;
 	}
@@ -122,66 +124,72 @@ public class MapVector extends AbstractVector implements ISparseVector{
 		return sum;
 	}
 
-    @Override
-    public Iterator<VectorEntry> iterator() {
-        return new MapVectorIterator();
-    }
+	@Override
+	public Iterator<VectorEntry> iterator() {
+		return new MapVectorIterator();
+	}
 
-    /**
-     * Iterator over a sparse vector
-     */
-    private class MapVectorIterator implements Iterator<VectorEntry> {
+	/**
+	 * Iterator over a sparse vector
+	 */
+	private class MapVectorIterator implements Iterator<VectorEntry> {
 
-        private int cursor;
-        private int[] indices = MapVector.this.getIndex();
-        private final MapVectorEntry entry = new MapVectorEntry();
+		private int cursor;
+		private int[] indices = MapVector.this.getIndex();
+		private final MapVectorEntry entry = new MapVectorEntry();
 
-        public boolean hasNext() {
-            return cursor < indices.length;
-        }
+		public boolean hasNext() {
+			return cursor < indices.length;
+		}
 
-        public VectorEntry next() {
-            entry.update(indices[cursor]);
+		public VectorEntry next() {
+			entry.update(indices[cursor]);
 
-            cursor++;
+			cursor++;
 
-            return entry;
-        }
+			return entry;
+		}
 
-        public void remove() {
-            entry.set(0);
-        }
+		public void remove() {
+			entry.set(0);
+		}
 
-    }
+	}
 
-    /**
-     * Entry of a sparse vector
-     */
-    private class MapVectorEntry implements VectorEntry {
+	/**
+	 * Entry of a sparse vector
+	 */
+	private class MapVectorEntry implements VectorEntry {
 
-        private int index;
+		private int index;
 
-        public void update(int index) {
-            this.index = index;
-        }
+		public void update(int index) {
+			this.index = index;
+		}
 
-        public int index() {
-            return index;
-        }
+		public int index() {
+			return index;
+		}
 
-        public double get() {
-            return map.getOrDefault(index, 0.0);
-        }
+		public double get() {
+			return map.getOrDefault(index, 0.0);
+		}
 
-        public void set(double value) {
-            map.put(index, value);
-        }
+		public void set(double value) {
+			map.put(index, value);
+		}
 
-    }
+	}
 
 	@Override
 	public int[] getIndex() {
-		return map.entrySet().stream().sorted().mapToInt(e -> e.getKey()).toArray();
+		Stream<Entry<Integer, Double>> stream = map.entrySet().stream();
+
+		if(!(map instanceof SortedMap)){
+			stream = stream.sorted((e1, e2) -> e1.getKey().compareTo(e2.getKey()));
+		}
+
+		return stream.mapToInt(e -> e.getKey()).toArray();
 	}
 
 	@Override
@@ -191,25 +199,25 @@ public class MapVector extends AbstractVector implements ISparseVector{
 
 	@Override
 	public void compact() {
-		
+
 		Map<Integer, Double> newMap = supplier.get();
-		
+
 		map.entrySet().stream()
 		.filter(e -> e.getValue() != 0)
 		.forEach(e -> newMap.put(e.getKey(), e.getValue()));
-		
-		map.clear();
-		map.putAll(newMap);
 
+		map = newMap;
 	}
 
 	@Override
 	public double[] getData() {
-		return map.entrySet()
-				.stream()
-				.sorted((e1, e2) -> e1.getKey().compareTo(e2.getKey()))
-				.mapToDouble(e -> e.getValue())
-				.toArray();
+		Stream<Entry<Integer, Double>> stream = map.entrySet().stream();
+
+		if(!(map instanceof SortedMap)){
+			stream = stream.sorted((e1, e2) -> e1.getKey().compareTo(e2.getKey()));
+		}
+
+		return stream.mapToDouble(e -> e.getValue()).toArray();
 	}
 
 }

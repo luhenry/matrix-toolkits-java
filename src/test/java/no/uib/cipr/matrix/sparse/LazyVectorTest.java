@@ -171,6 +171,7 @@ public class LazyVectorTest extends VectorTestAbstract {
     	testPerformance(1000);
     	testPerformance(1000);
     	testPerformance(1000);
+    	
     	System.out.println();
     	System.out.println("Fill\tSparse\tLazy\tHash\tTree");
     	
@@ -183,8 +184,8 @@ public class LazyVectorTest extends VectorTestAbstract {
     public void testPerformance(int fill){
     	
     	int size = fill*10;
-    	double mult = 0.1;
-    	int loops = 1000000;
+    	double mult = 0.01;
+    	int loops = 10000000;
     	
     	while(loops*(long)(fill) > 1E7){
     		loops /= 2;
@@ -225,8 +226,8 @@ public class LazyVectorTest extends VectorTestAbstract {
     		for(int f = 0; f < index[i].length; f++){
     			v.set(index[i][f], data[i][f]);
     		}
-    		v.compact();
-    		//v.getData();
+    		//v.compact();
+    		v.getData();
     	}
 
     	return System.nanoTime() - start;
