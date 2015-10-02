@@ -179,39 +179,36 @@ public class LazyVector extends AbstractVector implements ISparseVector {
 		check(index);
 
 		convertAllToOrdered();
-
 		int in = Arrays.binarySearch(this.index, 0, numOrdered, index);
-
 		return in < 0 ? 0 : data[in];
 	}
-
-
+	
+		
 	/**
 	 * @param ind
 	 * @param val
 	 * @param doAdd
 	 */
 	private void put(int ind, double val, boolean doAdd){ 
-		if(doAdd && val == 0){ return;}
-		
 
-		// This entire insertion block is optional, it just improves performance for small N.
 		if(numUnordered == 0){
 
 			int pos = ~numOrdered;
-			if(numOrdered > 0 && ind <= index[numOrdered - 1]){ // Try to add to end if possible
-				pos = Arrays.binarySearch(index, 0, numOrdered, ind);	
+			if(numOrdered > 0 && ind <= index[numOrdered - 1]){ // If cannot add to end
+				pos = Arrays.binarySearch(index, 0, numOrdered, ind);
+				
+				if(pos >= 0){
+					data[pos] = doAdd ? data[pos] + val : val;
+					return;
+				}
 			}
 
-			if(pos >= 0){
-				data[pos] = doAdd ? data[pos] + val : val;
-				return;
-			}
-			
+
 			if(val == 0){ return;}
-			
+
+			// This entire insertion block is optional, it just improves performance for small N.
 			pos = ~pos; //bitwise inverse indicates insertion is necessary, convert to insertion position
-			if(pos == numOrdered || numOrdered <= 128){
+			if(numOrdered - pos < 128){
 
 				int[] newIndex = index;
 				double[] newData = data;
@@ -220,7 +217,7 @@ public class LazyVector extends AbstractVector implements ISparseVector {
 				if (numOrdered >= data.length) {
 
 					// If zero-length, use new length of 1, else double the bandwidth
-					int newLength = Math.min(size, Math.max(8, index.length*2));
+					int newLength = Math.min(size, Math.max(4, index.length*2));
 
 					// Copy existing data into new arrays
 					newIndex = new int[newLength];
@@ -246,13 +243,12 @@ public class LazyVector extends AbstractVector implements ISparseVector {
 		}
 
 
-
 		// If no more room in unordered area compact and retry. Reallocate if numOrdered is high.
 		if(numOrdered + numUnordered == index.length ){
 
 			int newSize = -1;
 			if(numOrdered > (index.length/2) || index.length == 0 ){
-				newSize = Math.min(size, Math.max(8, index.length*2));
+				newSize = Math.min(size, Math.max(4,   index.length*2));
 			}
 			convertAllToOrdered(newSize);
 			put(ind, val, doAdd);
@@ -261,7 +257,7 @@ public class LazyVector extends AbstractVector implements ISparseVector {
 
 
 		data[numOrdered + numUnordered] = val;
-		index[numOrdered + numUnordered] = doAdd ? ~ind : ind;		
+		index[numOrdered + numUnordered] = doAdd? ~ind : ind;
 		numUnordered++;
 	}
 
@@ -271,7 +267,8 @@ public class LazyVector extends AbstractVector implements ISparseVector {
 		convertAllToOrdered(-1);
 	}
 
-	/** Sorts and coalesces unordered entries, and combines
+	/**
+	 * Combines all unordered entries into the ordered section.
 	 * @param newSize used to dictate size of new array if resize is necessary. If less than 0 a new array will not be allocated.
 	 */
 	private void convertAllToOrdered(int newSize){
@@ -279,57 +276,58 @@ public class LazyVector extends AbstractVector implements ISparseVector {
 
 		newSize = Math.max(newSize, index.length);
 
-		int[] tempIndex = new int[newSize];
-		double[] tempData = new double[newSize];
-		copyAndSortUnordered(tempIndex.length - numUnordered, tempIndex, tempData);
-
+		// Put a sorted copy of unordered entries at the end of the new array
+		int[] newIndex = new int[newSize];
+		double[] newData = new double[newSize];
+		copyAndSortUnordered(
+				numOrdered, index, data,
+				newIndex.length - numUnordered, newIndex, newData,
+				numUnordered);
 
 		// Merge old ordered entries and coalesce and merge new unordered entries.
 		numOrdered = merge(index, data, 0, numOrdered,
-				tempIndex, tempData, tempIndex.length - numUnordered, tempIndex.length,
-				tempIndex, tempData, 0);
+				newIndex, newData, newIndex.length - numUnordered, newIndex.length,
+				newIndex, newData, 0);
 
 		numUnordered = 0;
 
-		index = tempIndex;
-		data = tempData;
-
-
-		//Arrays.fill(index, numOrdered, index.length, 0); // not really needed. Could just let junk data sit there.
+		index = newIndex;
+		data = newData;
 	}
 
 	/** 
-	 * Accepts unordered entries and performs a stable sort by index.
-	 * Bitwise inverse indices are sorted as though they are positive.
-	 * Requires that argument arrays are copies of the 
+	 * Transfers a sorted compy of the unordered entries into the argument arrays.
+	 * Bitwise inverse indices (adds) are sorted as though they are their positive equivalent.
+	 * Requires that argument arrays are large enough to hold all unordered entries
 	 */
-	private void copyAndSortUnordered(int start, int[] tempIndex, double[] tempData) {
-		// Get a set of pointers which are ordered by the index they point to.
 
-		Integer[] ptr = new Integer[numUnordered]; // Ugly, but, can't custom sort primitives. Java 10!
+	private static void copyAndSortUnordered(
+			int startIn, int[] indexIn, double[] dataIn,
+			int startOut, int[] indexOut, double[] dataOut,
+			int length) {
 
-		for(int i = 0; i < numUnordered; i++){ptr[i] = Integer.valueOf(i + numOrdered);}
+		Integer[] ptr = new Integer[length]; // Ugly, but, can't custom sort primitives. Java 10?!
+		int[] positiveIndex = new int[length]; //Arrays.copyOfRange(index, numOrdered, numOrdered + numUnordered);
+		for(int i = 0; i < length; i++){
+			ptr[i] = i;
+			positiveIndex[i] = Math.max(indexIn[i+startIn], ~indexIn[i+startIn]);
+		}
 
 		Arrays.sort(ptr, 0, ptr.length, (ptr1, ptr2) -> {
-			// negative indices in unordered area indicate an add, ignore for now.
-			int ptr1Index = index[ptr1] < 0 ? ~index[ptr1] : index[ptr1];
-			int ptr2Index = index[ptr2] < 0 ? ~index[ptr2] : index[ptr2];
-
-			if(ptr1Index < ptr2Index){return -1;}
-			if(ptr1Index > ptr2Index){return 1;}
-			return ptr1.compareTo(ptr2); // stable sort will preserve chronological order of set()s and add()s
+			int d = positiveIndex[ptr1] - positiveIndex[ptr2]; // Can't underflow, both positive
+			return d;
+			//return d == 0 ? ptr1.compareTo(ptr2) : d;
 		});
 
 
 		//Sort both data and index by index using ptrs
 		for(int i = 0; i < ptr.length; i++){
-			tempIndex[start + i] = index[ptr[i]];
-			tempData[start + i] = data[ptr[i]];
+			indexOut[startOut + i] = indexIn[ptr[i]+startIn];
+			dataOut[startOut + i] = dataIn[ptr[i]+startIn];
 		}
 
 		return;
 	}
-
 
 	/**Takes two pairs of index sorted array slices and does an index sorted merge.
 	 * Processed from start to end, entries duplicated in both inputs are removed with preference to keep entries from index2 and data2.
@@ -338,7 +336,7 @@ public class LazyVector extends AbstractVector implements ISparseVector {
 	 * 
 	 * @return length of data after
 	 */
-	private int merge(
+	private static int merge(
 			int[] index1, double[] data1, int start1, int end1,
 			int[] index2, double[] data2, int start2, int end2,
 			int[] indexOut, double[] dataOut, int startOut){
@@ -362,8 +360,8 @@ public class LazyVector extends AbstractVector implements ISparseVector {
 				dataOut[k] = data1[i++];
 				j = collectDuplicateUnorderedEntries(index2, data2, end2, dataOut, j, k, ind2);
 			}
-			
-			if(dataOut[k] != 0){k++;}
+
+			if(dataOut[k] != 0){k++;} // removes 0s from ordered entries
 		}
 
 		while(i < end1){
@@ -383,24 +381,19 @@ public class LazyVector extends AbstractVector implements ISparseVector {
 		return k - startOut;
 	}
 
-
 	/**
-	 * Sub-method of merge
-	 * If there are more unordered entries of the same index, scan through them all, add to or overwrite dataOut and then update "j"
+	 * Sub-method of merge.
+	 * If there are unordered entries with the same index collect and apply them to dataOut.
+	 * @return "j", final position in unordered entries array
 	 */
-	private int collectDuplicateUnorderedEntries(int[] index2, double[] data2, int end2, double[] dataOut, int j, int k, int ind2) {
+	private static int collectDuplicateUnorderedEntries(int[] index2, double[] data2, int end2, double[] dataOut, int j, int k, int ind2) {
 		int inv = ~ind2;
 		while(j < end2 && (index2[j] == ind2 || index2[j] == inv)){
-			if(index2[j] < 0){
-				dataOut[k] += data2[j++];
-			} else {
-				dataOut[k] = data2[j++];
-			}
+			dataOut[k] = index2[j] < 0 ? dataOut[k] + data2[j] : data2[j];
+			j++;
 		}
 		return j;
 	}
-
-	
 
 	@Override
 	public LazyVector copy() {
@@ -511,12 +504,15 @@ public class LazyVector extends AbstractVector implements ISparseVector {
 		if (numOrdered == index.length)
 			return index;
 
-		convertAllToOrdered();
-		// could run compact, or return subarray
-		// compact();
-		int[] indices = new int[numOrdered];
-		System.arraycopy(index, 0, indices, 0, numOrdered);
-		return indices;
+		compact();
+		return index;
+		//		
+		//		convertAllToOrdered();
+		//		// could run compact, or return subarray
+		//		
+		//		int[] indices = new int[numOrdered];
+		//		System.arraycopy(index, 0, indices, 0, numOrdered);
+		//		return indices;
 	}
 
 	/**

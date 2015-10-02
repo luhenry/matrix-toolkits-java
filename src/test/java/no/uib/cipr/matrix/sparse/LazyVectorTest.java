@@ -20,10 +20,12 @@
 
 package no.uib.cipr.matrix.sparse;
 
+import java.lang.instrument.Instrumentation;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.TreeMap;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import no.uib.cipr.matrix.DenseVector;
@@ -168,47 +170,54 @@ public class LazyVectorTest extends VectorTestAbstract {
     }
     
     public void testPerformance(){
-    	testPerformance(1000);
-    	testPerformance(1000);
-    	testPerformance(1000);
+    	testPerformance(1000, 10, 20);
+
     	
     	System.out.println();
     	System.out.println("Fill\tSparse\tLazy\tHash\tTree");
     	
     	for(double fill = 2<<14; fill >= 1; fill = fill/2){
-    		testPerformance((int)fill);
+    		testPerformance((int)fill, 100, 10);
     	}
+    	
+    	
+  
+    	
     }
     
     
-    public void testPerformance(int fill){
+    public void testPerformance(int fill, int sizeFact, int repeats){
     	
-    	int size = fill*10;
-    	double mult = 0.01;
-    	int loops = 10000000;
+    	int size = fill*sizeFact;
+    	double mult = 0.1;
+    	int loops = 1000000;
     	
     	while(loops*(long)(fill) > 1E7){
     		loops /= 2;
     		mult *= 2;
     	}
     	
+   
 
+    	long sparse = Long.MAX_VALUE, lazy = Long.MAX_VALUE, hash = Long.MAX_VALUE, tree = Long.MAX_VALUE;
     	
-    	double[][] data = new double[loops][fill];
-    	int[][] index = new int[loops][fill];
-    	for(int i = 0; i < loops; i++){
-    		for(int f = 0; f < fill; f++){
-    			data[i][f] = Math.random();
-    			index[i][f] = (int)(Math.random()*size);
-    		}
+    	for(int repeat = 0; repeat < repeats; repeat++){
+        	double[][] data = new double[loops][fill];
+        	int[][] index = new int[loops][fill];
+        	for(int i = 0; i < loops; i++){
+        		for(int f = 0; f < fill; f++){
+        			data[i][f] = Math.random();
+        			index[i][f] = (int)(Math.random()*size);
+        		}
+        	}
+      
+        	sparse = Math.min(sparse, trial(index, data, size, SparseVector::new));
+     	
+        	lazy = Math.min(lazy, trial(index, data, size, LazyVector::new));
+        	hash = Math.min(hash, trial(index, data, size, dim -> new MapVector(dim, HashMap::new)));
+        	tree = Math.min(tree, trial(index, data, size, dim -> new MapVector(dim, TreeMap::new)));
     	}
-    	
 
-    	long sparse = trial(index, data, size, SparseVector::new);
-    	long lazy = trial(index, data, size, LazyVector::new);
-    	long hash = trial(index, data, size, i -> new MapVector(i, HashMap::new));
-    	long tree = trial(index, data, size, i -> new MapVector(i, TreeMap::new));
-    	
     	
     	System.out.printf("%d\t%f\t%f\t%f\t%f\t", 
     			fill, 
@@ -220,9 +229,23 @@ public class LazyVectorTest extends VectorTestAbstract {
     }
     
     private long trial(int[][] index, double[][] data, int size, Function<Integer, ISparseVector> supplier){
+    	System.gc();
     	long start = System.nanoTime();
     	for(int i = 0; i < index.length; i++){
     		ISparseVector v = supplier.apply(size);
+    		for(int f = 0; f < index[i].length; f++){
+    			v.set(index[i][f], data[i][f]);
+    		}
+    		//v.compact();
+    		v.getData();
+    	}
+    	return System.nanoTime() - start;
+    }
+    
+    private long trialPreAllocate(int[][] index, double[][] data, int size, BiFunction<Integer,  Integer, ISparseVector> supplier){
+    	long start = System.nanoTime();
+    	for(int i = 0; i < index.length; i++){
+    		ISparseVector v = supplier.apply(size, index[i].length);
     		for(int f = 0; f < index[i].length; f++){
     			v.set(index[i][f], data[i][f]);
     		}
