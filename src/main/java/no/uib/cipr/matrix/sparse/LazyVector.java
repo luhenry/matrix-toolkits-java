@@ -296,7 +296,7 @@ public class LazyVector extends AbstractVector implements ISparseVector {
 	}
 
 	/** 
-	 * Transfers a sorted compy of the unordered entries into the argument arrays.
+	 * Transfers a sorted copy of the unordered entries into the argument arrays.
 	 * Bitwise inverse indices (adds) are sorted as though they are their positive equivalent.
 	 * Requires that argument arrays are large enough to hold all unordered entries
 	 */
@@ -314,9 +314,7 @@ public class LazyVector extends AbstractVector implements ISparseVector {
 		}
 
 		Arrays.sort(ptr, 0, ptr.length, (ptr1, ptr2) -> {
-			int d = positiveIndex[ptr1] - positiveIndex[ptr2]; // Can't underflow, both positive
-			return d;
-			//return d == 0 ? ptr1.compareTo(ptr2) : d;
+			return positiveIndex[ptr1] - positiveIndex[ptr2];// Can't underflow, both positive
 		});
 
 

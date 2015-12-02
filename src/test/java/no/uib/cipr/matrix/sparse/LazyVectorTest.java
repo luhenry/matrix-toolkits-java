@@ -237,7 +237,7 @@ public class LazyVectorTest extends VectorTestAbstract {
     			v.set(index[i][f], data[i][f]);
     		}
     		//v.compact();
-    		v.getData();
+    		//v.getData();
     	}
     	return System.nanoTime() - start;
     }
@@ -250,7 +250,7 @@ public class LazyVectorTest extends VectorTestAbstract {
     			v.set(index[i][f], data[i][f]);
     		}
     		//v.compact();
-    		v.getData();
+    		//v.getData();
     	}
 
     	return System.nanoTime() - start;
