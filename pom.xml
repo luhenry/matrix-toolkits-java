@@ -3,9 +3,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!--
-        mvn release:clean
-        mvn release:prepare
-        mvn release:perform
+        Deploying to maven central:
+           mvn release:clean
+           mvn release:prepare
+           mvn release:perform
+
+        Then go to https://oss.sonatype.org and log in.
+        Close repository, and if everything is valid, release it.
+
+        If it fails, use:
+          git tag -d mtj-1.0.X
+          git push REMOTE :refs/tags/mtj-1.0.X
+        to delete tags of a release and
+          mvn release:rollback
     -->
     <parent>
         <groupId>org.sonatype.oss</groupId>

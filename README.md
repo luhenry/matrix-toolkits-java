@@ -79,7 +79,8 @@ Legal
 History
 =======
 
-This project was originally written by Bjørn-Ove Heimsund, who has taken a step back due to other commitments.
+This project was originally written by Bjørn-Ove Heimsund and extended/meintained by Samuel Halliday, who has taken a step back due to other commitments.
+
 
 Installation
 ============
@@ -88,23 +89,23 @@ Releases are distributed on Maven central:
 
 ```xml
 <dependency>
-    <groupId>com.googlecode.matrix-toolkits-java</groupId>
+    <groupId>io.github.andreas-solti.matrix-toolkits-java</groupId>
     <artifactId>mtj</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.5</version>
 </dependency>
 ```
 
-Unofficial single-jar builds may be available from [`java-matrix-benchmark`](https://code.google.com/p/java-matrix-benchmark/source/browse/#svn%2Ftrunk%2Flib%2Fmtj) for laggards who don't have [5 minutes to learn Maven](http://maven.apache.org/guides/getting-started/maven-in-five-minutes.html).
+Example Code
+============
+```java
+   // check out test class in SparseEigenvalueTest:
+   CompColMatrix m = createRandomMatrix(10,15); // create a random
+   ArpackGen generalSolver = new ArpackGen(matrix);
+   generalSolver.setComputeOnlyEigenvalues(true);
+   Map<Double, DenseVectorSub> eigenValueMap = generalSolver.solve(3, ArpackGen.Ritz.LR); // get 3 largest eigenvalues
+   double largestARPACKEigenValue = eigenValueMap.keySet().iterator().next();
+´´´
 
-Snapshots may be distributed on Sonatype's Snapshot Repository (if you submit a pull request, a build will appear here when it is merged):
-
-```xml
-<dependency>
-  <groupId>com.googlecode.matrix-toolkits-java</groupId>
-  <artifactId>mtj</artifactId>
-  <version>1.0.3-SNAPSHOT</version>
-</dependency>
-```
 
 Contributing
 ============
