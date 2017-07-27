@@ -20,6 +20,7 @@
 
 package no.uib.cipr.matrix;
 
+import junit.framework.TestCase;
 import no.uib.cipr.matrix.Vector.Norm;
 import org.junit.After;
 import org.junit.Before;

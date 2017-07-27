@@ -156,13 +156,13 @@ public class SparseEigenvalueTest  {
         int successCount = 0;
         int iteration = 0;
         DescriptiveStatistics errors = new DescriptiveStatistics();
-        for (iteration = 0; iteration < 100; iteration++){
+        for (iteration = 0; iteration < 50; iteration++){
             CompColMatrix m = createRandomMatrix(dim+iteration,dim+iteration,5);
             try {
                 testMatrix(m);
                 successCount++;
             } catch (IllegalStateException e){
-                e.printStackTrace();
+                System.out.println(e.getMessage());
                 errorcount++;
             } catch (AssertionError e) {
                 String[] parts = e.getMessage().split("<");
@@ -184,7 +184,7 @@ public class SparseEigenvalueTest  {
         int successCount = 0;
         int iteration = 0;
         DescriptiveStatistics errors = new DescriptiveStatistics();
-        for (iteration = 0; iteration < 100; iteration++){
+        for (iteration = 0; iteration < 50; iteration++){
             CompColMatrix m = createRandomMatrix(dim+iteration,dim+iteration,5);
             try {
                 testLargestEigenvalue(m);
