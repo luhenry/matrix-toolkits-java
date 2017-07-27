@@ -237,7 +237,7 @@ public class SparseVector extends AbstractVector implements ISparseVector {
     @Override
     public SparseVector zero() {
         java.util.Arrays.fill(data, 0);
-        used = 0;
+        used = 0; // TODO: Confirm correctness, java doc says "preserves underlying structure" this will result it overwriting.
         return this;
     }
 
@@ -374,9 +374,7 @@ public class SparseVector extends AbstractVector implements ISparseVector {
         return used;
     }
 
-    /**
-     * Compacts the vector
-     */
+    @Override
     public void compact() {
         int nz = Matrices.cardinality(this); // catches zero entries
 

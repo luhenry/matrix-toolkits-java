@@ -97,7 +97,7 @@ public abstract class AbstractVector implements Vector, Serializable {
     }
 
     /**
-     * Checks the index
+     * Checks the index is non-zero and within the vector
      */
     protected void check(int index) {
         if (index < 0)
