@@ -1,6 +1,7 @@
 package no.uib.cipr.matrix.sparse;
 
 import com.github.fommil.netlib.ARPACK;
+import lombok.extern.java.Log;
 import no.uib.cipr.matrix.DenseVector;
 import no.uib.cipr.matrix.DenseVectorSub;
 import no.uib.cipr.matrix.Matrix;
@@ -19,9 +20,9 @@ import java.util.TreeMap;
  *
  * @author Andreas Solti adopted from the class {@link no.uib.cipr.matrix.sparse.ArpackSym} by Sam Halliday
  */
+@Log
 public class ArpackGen {
 
-    private static final java.util.logging.Logger log = java.util.logging.Logger.getLogger(ArpackGen.class.getName());
     private boolean computeOnlyEigenvalues;
 
     public void setComputeOnlyEigenvalues(boolean computeOnlyEigenvalues) {
@@ -173,7 +174,7 @@ public class ArpackGen {
                 } else {
                     // did not converge: Try lowering the accuracy:
                     tol.val = tol.val * 10;
-                    System.out.println("New reduced tolerance: "+tol.val);
+                    log.info("New reduced tolerance: "+tol.val);
                     return solve(eigenvalues, ritz, tol.val, ncvModification);
                 }
             }
@@ -190,7 +191,7 @@ public class ArpackGen {
                 //  3: No shifts could be applied during a cycle of the
                 //     Implicitly restarted Arnoldi iteration. One possibility
                 //     is to increase the size of NCV relative to NEV.
-                System.err.println("'No shifts could be applied during a cycle!'\n" +
+                log.info("'No shifts could be applied during a cycle!'\n" +
                         "Adding one to the ncv count: "+(ncvModification+1));
                 return solve(eigenvalues, ritz, tolerance, ncvModification+1);
             }
@@ -198,9 +199,8 @@ public class ArpackGen {
         }
         if (info.val == 1){
             // not converged in max num of iterations!
-            System.err.println("Maximum number ("+MAX_ITERATIONS+") taken. "+iparam[5]+" converged Ritz values.");
+            log.info("Maximum number ("+MAX_ITERATIONS+") taken. "+iparam[5]+" converged Ritz values.");
         }
-        System.out.println(iparam[5]+" converged 'Ritz' values.");
         double[] dr = new double[nev.val+1];
         double[] di = java.util.Arrays.copyOf(dr,dr.length);
         boolean[] select = new boolean[ncv];
@@ -217,7 +217,7 @@ public class ArpackGen {
                 resid, ncv, v, n, iparam, ipntr, workd, workl, workl.length,
                 info);
         if (info.val != 0) {
-            System.out.println(Arrays.toString(iparam));
+            log.warning("info = " + info.val+" iparam = " + Arrays.toString(iparam));
             throw new IllegalStateException("info = " + info.val);
         }
 

@@ -121,7 +121,6 @@ public class SparseEigenvalueTest  {
      * @throws Exception
      */
     @Test
-    @Ignore
     public void testEigenVectors() throws Exception {
         testMatrix(A);
     }
@@ -157,7 +156,7 @@ public class SparseEigenvalueTest  {
         int successCount = 0;
         int iteration = 0;
         DescriptiveStatistics errors = new DescriptiveStatistics();
-        for (iteration = 0; iteration < 1000; iteration++){
+        for (iteration = 0; iteration < 100; iteration++){
             CompColMatrix m = createRandomMatrix(dim+iteration,dim+iteration,5);
             try {
                 testMatrix(m);
