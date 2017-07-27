@@ -9,7 +9,7 @@
     -->
     <groupId>io.github.andreas-solti</groupId>
     <artifactId>mtj</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.5-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>matrix-toolkits-java</name>
@@ -43,9 +43,9 @@
 
     <scm>
         <connection>scm:git:git://github.com/andreas-solti/matrix-toolkits-java.git</connection>
-        <developerConnection>scm:git:ssh://github.com:andreas-solti/matrix-toolkits-java.git</developerConnection>
+        <developerConnection>scm:git:ssh://github-andreas-solti/andreas-solti/matrix-toolkits-java.git</developerConnection>
         <url>http://github.com/andreas-solti/matrix-toolkits-java/tree/master</url>
-      <tag>mtj-1.0.5</tag>
+      <tag>mtj-1.0.6-1</tag>
   </scm>
 
 
@@ -215,12 +215,17 @@
                             <goals>
                                 <goal>jar-no-fork</goal>
                             </goals>
+                            <phase>package</phase>
                         </execution>
                     </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
+                    <configuration>
+                        <failOnError>false</failOnError>
+                        <additionalparam>-Xdoclint:none</additionalparam>
+                    </configuration>
                     <version>2.9.1</version>
                     <executions>
                         <execution>
@@ -240,6 +245,25 @@
                         <serverId>ossrh</serverId>
                         <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                         <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.5.3</version>
+                    <configuration>
+                        <autoVersionSubmodules>true</autoVersionSubmodules>
+                        <useReleaseProfile>false</useReleaseProfile>
+                        <releaseProfiles>release</releaseProfiles>
+                        <goals>deploy</goals>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>com.googlecode.maven-java-formatter-plugin</groupId>
+                    <artifactId>maven-java-formatter-plugin</artifactId>
+                    <version>0.4</version>
+                    <configuration>
+                        <configFile>.formatting.xml</configFile>
                     </configuration>
                 </plugin>
             </plugins>

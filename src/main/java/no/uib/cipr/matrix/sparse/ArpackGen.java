@@ -111,7 +111,7 @@ public class ArpackGen {
     /**
      *
      * @param eigenvalues  NEV     Integer.  (INPUT)
-    c          Number of eigenvalues of OP to be computed. 0 < NEV < N-1. (Where N is the matrix dimension)
+     *          Number of eigenvalues of OP to be computed. 0 < NEV < N-1. (Where N is the matrix dimension)
      * @param ritz
      * @param tolerance
      * @param ncvModification
