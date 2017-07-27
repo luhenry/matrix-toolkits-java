@@ -7,22 +7,17 @@
         mvn release:prepare
         mvn release:perform
     -->
-    <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>7</version>
-    </parent>
-
-    <groupId>com.googlecode.matrix-toolkits-java</groupId>
-    <artifactId>mtj</artifactId>
-    <version>1.0.5-SNAPSHOT</version>
+    <groupId>at.ac.wu.infobiz.matrix-toolkits-java</groupId>
+    <artifactId>mtj-general</artifactId>
+    <version>0.9</version>
     <packaging>jar</packaging>
 
-    <name>Matrix Toolkits for Java</name>
+    <name>Matrix Toolkits for Java - With General Matrix Eigenvalue support</name>
     <description>A comprehensive collection of matrix data structures, linear solvers, least squares methods,
         eigenvalue, and singular value decompositions.
+        Forked from: https://github.com/fommil/matrix-toolkits-java
     </description>
-    <url>https://github.com/fommil/matrix-toolkits-java/</url>
+    <url>https://github.com/AndreasRoggeSolti/matrix-toolkits-java/</url>
     <licenses>
         <license>
             <name>GNU Lesser General Public License</name>
@@ -38,6 +33,9 @@
             <name>Sam Halliday</name>
             <id>fommil</id>
             <email>sam.halliday@gmail.com</email>
+        </developer>
+        <developer>
+            <name>Andreas Solti</name>
         </developer>
     </developers>
 
@@ -59,28 +57,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>sonatype-snapshots</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>sonatype-releases</id>
-            <url>https://oss.sonatype.org/content/repositories/releases/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
 
     <!-- mvn versions:display-dependency-updates -->
     <dependencies>
@@ -133,6 +109,14 @@
     <build>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.0</version>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                    </configuration>
+                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
