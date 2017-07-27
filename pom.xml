@@ -7,17 +7,18 @@
         mvn release:prepare
         mvn release:perform
     -->
-    <groupId>at.ac.wu.infobiz.matrix-toolkits-java</groupId>
-    <artifactId>mtj-general</artifactId>
-    <version>0.9</version>
+    <groupId>io.github.andreas-solti</groupId>
+    <artifactId>mtj</artifactId>
+    <version>1.0.6</version>
     <packaging>jar</packaging>
 
-    <name>Matrix Toolkits for Java - With General Matrix Eigenvalue support</name>
+    <name>matrix-toolkits-java</name>
     <description>A comprehensive collection of matrix data structures, linear solvers, least squares methods,
         eigenvalue, and singular value decompositions.
-        Forked from: https://github.com/fommil/matrix-toolkits-java
+        Forked from: https://github.com/fommil/matrix-toolkits-java and added support for eigenvalue computation of general matrices
     </description>
-    <url>https://github.com/AndreasRoggeSolti/matrix-toolkits-java/</url>
+    <url>http://github.com/andreas-solti/matrix-toolkits-java</url>
+
     <licenses>
         <license>
             <name>GNU Lesser General Public License</name>
@@ -36,26 +37,35 @@
         </developer>
         <developer>
             <name>Andreas Solti</name>
+            <email>andreas.solti@gmail.com</email>
         </developer>
     </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/andreas-solti/matrix-toolkits-java.git</connection>
+        <developerConnection>scm:git:ssh://github.com:andreas-solti/matrix-toolkits-java.git</developerConnection>
+        <url>http://github.com/andreas-solti/matrix-toolkits-java/tree/master</url>
+    </scm>
+
 
     <prerequisites>
         <maven>3.0.3</maven>
     </prerequisites>
 
-    <scm>
-        <url>https://github.com/fommil/matrix-toolkits-java</url>
-        <connection>scm:git:git@github.com:fommil/matrix-toolkits-java.git</connection>
-        <developerConnection>scm:git:git@github.com:fommil/matrix-toolkits-java.git</developerConnection>
-    </scm>
-    <issueManagement>
-        <system>github</system>
-        <url>https://github.com/fommil/matrix-toolkits-java/issues</url>
-    </issueManagement>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- github server corresponds to entry in ~/.m2/settings.xml -->
+        <github.global.server>github</github.global.server>
     </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>internal.repo</id>
+            <name>Temporary Staging Repository</name>
+            <url>file://${project.build.directory}/mvn-repo</url>
+        </repository>
+    </distributionManagement>
 
 
     <!-- mvn versions:display-dependency-updates -->
@@ -110,57 +120,44 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.0</version>
+                    <version>3.2</version>
                     <configuration>
                         <source>1.8</source>
                         <target>1.8</target>
+                        <encoding>UTF-8</encoding>
                     </configuration>
                 </plugin>
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.17</version>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.8.1</version>
                     <configuration>
-                      <systemProperties>
-                        <!--
-                          <property>
-                              <name>java.util.logging.config.file</name>
-                              <value>${project.build.directory}/test-classes/logging.properties</value>
-                          </property>
-                        -->
-                        <!-- force the java implementation of netlib-java
-                          <property>
-                            <name>com.github.fommil.netlib.BLAS</name>
-                            <value>com.github.fommil.netlib.F2jBLAS</value>
-                          </property>
-                          <property>
-                            <name>com.github.fommil.netlib.LAPACK</name>
-                            <value>com.github.fommil.netlib.F2jLAPACK</value>
-                          </property>
-                          <property>
-                            <name>com.github.fommil.netlib.ARPACK</name>
-                            <value>com.github.fommil.netlib.F2jARPACK</value>
-                          </property>
-                        -->
-                        <!-- force the native ref implementation of netlib-java -->
-                        <!--
-                          <property>
-                            <name>com.github.fommil.netlib.BLAS</name>
-                            <value>com.github.fommil.netlib.NativeRefBLAS</value>
-                          </property>
-                          <property>
-                            <name>com.github.fommil.netlib.LAPACK</name>
-                            <value>com.github.fommil.netlib.NativeRefLAPACK</value>
-                          </property>
-                          <property>
-                            <name>com.github.fommil.netlib.ARPACK</name>
-                            <value>com.github.fommil.netlib.NativeRefARPACK</value>
-                          </property>
-                        -->  
-                      </systemProperties>
-                      <forkCount>1</forkCount>
+                        <altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo</altDeploymentRepository>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>com.github.github</groupId>
+                    <artifactId>site-maven-plugin</artifactId>
+                    <version>0.12</version>
+                    <configuration>
+                        <message>Maven artifacts for ${project.version}</message>  <!-- git commit message -->
+                        <noJekyll>true</noJekyll>                                  <!-- disable webpage processing -->
+                        <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory> <!-- matches distribution management repository url above -->
+                        <branch>refs/heads/mvn-repo</branch>                       <!-- remote branch name -->
+                        <includes><include>**/*</include></includes>
+                        <repositoryName>matrix-toolkits-java</repositoryName>      <!-- github repo name -->
+                        <repositoryOwner>andreas-solti</repositoryOwner>    <!-- github username  -->
+                    </configuration>
+                    <executions>
+                        <!-- run site-maven-plugin's 'site' target as part of the build's normal 'deploy' phase -->
+                        <execution>
+                            <goals>
+                                <goal>site</goal>
+                            </goals>
+                            <phase>site-deploy</phase>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -171,59 +168,56 @@
                             <id>sign-artifacts</id>
                             <phase>verify</phase>
                             <goals>
-                                <goal>sign</goal>
+                                <goal>gpg:sign</goal>
                             </goals>
                         </execution>
                     </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.2</version>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.17</version>
                     <configuration>
-                        <source>1.6</source>
-                        <target>1.6</target>
-                        <compilerArgs>
-                          <arg>-Xlint:all</arg>
-                          <!-- <arg>-Werror</arg> -->
-                        </compilerArgs>
+                        <skipTests>true</skipTests>
+                        <systemProperties>
+                            <!--
+                              <property>
+                                  <name>java.util.logging.config.file</name>
+                                  <value>${project.build.directory}/test-classes/logging.properties</value>
+                              </property>
+                            -->
+                            <!-- force the java implementation of netlib-java
+                              <property>
+                                <name>com.github.fommil.netlib.BLAS</name>
+                                <value>com.github.fommil.netlib.F2jBLAS</value>
+                              </property>
+                              <property>
+                                <name>com.github.fommil.netlib.LAPACK</name>
+                                <value>com.github.fommil.netlib.F2jLAPACK</value>
+                              </property>
+                              <property>
+                                <name>com.github.fommil.netlib.ARPACK</name>
+                                <value>com.github.fommil.netlib.F2jARPACK</value>
+                              </property>
+                            -->
+                            <!-- force the native ref implementation of netlib-java -->
+                            <!--
+                              <property>
+                                <name>com.github.fommil.netlib.BLAS</name>
+                                <value>com.github.fommil.netlib.NativeRefBLAS</value>
+                              </property>
+                              <property>
+                                <name>com.github.fommil.netlib.LAPACK</name>
+                                <value>com.github.fommil.netlib.NativeRefLAPACK</value>
+                              </property>
+                              <property>
+                                <name>com.github.fommil.netlib.ARPACK</name>
+                                <value>com.github.fommil.netlib.NativeRefARPACK</value>
+                              </property>
+                            -->
+                        </systemProperties>
+                        <forkCount>1</forkCount>
                     </configuration>
-                </plugin>
-                <plugin>
-                    <!-- For the benefit of java-matrix-benchmark -->
-                    <!-- mvn compile assembly:single -->
-                    <artifactId>maven-assembly-plugin</artifactId>
-                    <version>2.5.3</version>
-                    <configuration>
-                        <descriptorRefs>
-                            <descriptorRef>jar-with-dependencies</descriptorRef>
-                        </descriptorRefs>
-                    </configuration>
-                </plugin>
-                <plugin>
-                  <groupId>org.eluder.coveralls</groupId>
-                  <artifactId>coveralls-maven-plugin</artifactId>
-                  <version>3.0.1</version>
-                </plugin>
-                <plugin>
-                  <groupId>org.codehaus.mojo</groupId>
-                  <artifactId>cobertura-maven-plugin</artifactId>
-                  <version>2.6</version>
-                  <configuration>
-                    <format>xml</format>
-                    <maxmem>256m</maxmem>
-                    <check>
-                      <totalBranchRate>53</totalBranchRate>
-                    </check>
-                  </configuration>
-                </plugin>
-                <plugin>
-                  <groupId>com.googlecode.maven-java-formatter-plugin</groupId>
-                  <artifactId>maven-java-formatter-plugin</artifactId>
-                  <version>0.4</version>
-                  <configuration>
-                    <configFile>.formatting.xml</configFile>
-                  </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>

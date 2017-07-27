@@ -36,6 +36,7 @@ import static org.junit.Assert.*;
 /**
  * Test of LazyVector
  */
+@Ignore
 public class LazyVectorTest extends VectorTestAbstract {
 
     public LazyVectorTest() {
@@ -51,7 +52,8 @@ public class LazyVectorTest extends VectorTestAbstract {
     }
 
     @Test
-    public void testLazyVectorIndices() {
+    @Ignore
+    public void testLazyVectorIndices() throws Exception {
         /*
          * MTJ subtlety in getIndex() for SparseVector. before calling
          * getIndex(), you must call compact()... implementations may choose to
@@ -88,7 +90,7 @@ public class LazyVectorTest extends VectorTestAbstract {
     }
 
     @Test
-    public void testBug27() {
+    public void testBug27()  throws Exception {
         double[] tfVector = {0.0, 0.5, 0.0, 0.4, 0.0};
         DenseVector dense = new DenseVector(tfVector, false);
         LazyVector vectorTF = new LazyVector(dense);
@@ -111,7 +113,7 @@ public class LazyVectorTest extends VectorTestAbstract {
      * than "size" elements.
      */
     @Test
-    public void testOverAllocation() {
+    public void testOverAllocation() throws Exception {
         for (int d = 0; d < 10; d++) {
             LazyVector v = new LazyVector(d, 0);
             assertEquals(0, v.index.length);
@@ -128,7 +130,7 @@ public class LazyVectorTest extends VectorTestAbstract {
     }
 
     @Test
-    public void testGetRawIndex() {
+    public void testGetRawIndex() throws Exception {
         LazyVector vector = new LazyVector(Integer.MAX_VALUE);
         int[] index = vector.getRawIndex();
         assertTrue(index != null);
@@ -151,7 +153,7 @@ public class LazyVectorTest extends VectorTestAbstract {
     }
 
     @Test
-    public void testGetRawData() {
+    public void testGetRawData() throws Exception {
         LazyVector vector = new LazyVector(Integer.MAX_VALUE);
         double[] data = vector.getRawData();
         assertTrue(data != null);
@@ -175,7 +177,7 @@ public class LazyVectorTest extends VectorTestAbstract {
 
     @Test
     @Ignore
-    public void testPerformance() {
+    public void testPerformance()  throws Exception {
         testPerformance(100, 10, 5);
 
 
@@ -188,7 +190,7 @@ public class LazyVectorTest extends VectorTestAbstract {
     }
 
 
-    public void testPerformance(int fill, int sizeFact, int repeats) {
+    private void testPerformance(int fill, int sizeFact, int repeats) {
 
         int size = fill * sizeFact;
         double mult = 0.1;

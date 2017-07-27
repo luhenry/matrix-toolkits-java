@@ -121,6 +121,7 @@ public class SparseEigenvalueTest  {
      * @throws Exception
      */
     @Test
+    @Ignore
     public void testEigenVectors() throws Exception {
         testMatrix(A);
     }
@@ -150,6 +151,7 @@ public class SparseEigenvalueTest  {
     }
 
     @Test
+    @Ignore
     public void testExhaustively() throws Exception {
         int dim = 5;
         int errorcount = 0;

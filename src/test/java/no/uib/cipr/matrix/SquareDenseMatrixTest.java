@@ -20,10 +20,13 @@
 
 package no.uib.cipr.matrix;
 
+import org.junit.Ignore;
+
 /**
  * Test of square dense matrices. This is done as some solvers change for square
  * matrices (LU and QR)
  */
+@Ignore
 public class SquareDenseMatrixTest extends MatrixTestAbstract {
 
     @Override
