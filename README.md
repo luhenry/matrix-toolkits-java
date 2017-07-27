@@ -104,7 +104,7 @@ Example Code
    generalSolver.setComputeOnlyEigenvalues(true);
    Map<Double, DenseVectorSub> eigenValueMap = generalSolver.solve(3, ArpackGen.Ritz.LR); // get 3 largest eigenvalues
    double largestARPACKEigenValue = eigenValueMap.keySet().iterator().next();
-´´´
+```
 
 
 Contributing
