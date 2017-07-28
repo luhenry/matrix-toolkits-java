@@ -187,7 +187,7 @@ public class SparseEigenvalueTest  {
         int iteration = 0;
         DescriptiveStatistics errors = new DescriptiveStatistics();
         for (iteration = 0; iteration < 50; iteration++){
-            CompColMatrix m = createRandomMatrix(dim+iteration,dim+iteration,5);
+            CompColMatrix m = createRandomMatrix(dim+iteration,dim+iteration,2);
             try {
                 testLargestEigenvalue(m);
                 successCount++;
