@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/andreas-solti/matrix-toolkits-java.svg?branch=master)](https://travis-ci.org/andreas-solti/matrix-toolkits-java)
-[![Coverage Status](https://coveralls.io/repos/fommil/matrix-toolkits-java/badge.svg?branch=master)](https://coveralls.io/r/fommil/matrix-toolkits-java?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/andreas-solti/matrix-toolkits-java/badge.svg?branch=master)](https://coveralls.io/github/andreas-solti/matrix-toolkits-java?branch=master)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.andreas-solti.matrix-toolkits-java/mtj/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.andreas-solti.matrix-toolkits-java/mtj)
 [![Javadoc](https://javadoc-emblem.rhcloud.com/doc/io.github.andreas-solti.matrix-toolkits-java/mtj/badge.svg)](http://www.javadoc.io/doc/io.github.andreas-solti.matrix-toolkits-java/mtj)
 
