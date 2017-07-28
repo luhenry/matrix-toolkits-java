@@ -13,7 +13,8 @@ See [matrix-toolkits-java](https://github.com/fommil/matrix-toolkits-java) for t
 This fork is just a minor extension to cover the case of *general* matrices.
 The symmetric case was already covered in [ArpackSym](src/main/java/no/uib/cipr/matrix/sparse/ArpackSym.java).
 The new class is [ArpackGen](src/main/java/no/uib/cipr/matrix/sparse/ArpackGen.java).
-It uses [ARPACK](http://www.caam.rice.edu/software/ARPACK/)'s [dnaupd](http://www.caam.rice.edu/software/ARPACK/UG/node137.html) and dneupd routines forthe Implicitly Restarted Arnoldi Iteration.
+It uses [ARPACK](http://www.caam.rice.edu/software/ARPACK/)'s [dnaupd](http://www.caam.rice.edu/software/ARPACK/UG/node137.html) and
+dneupd routines for the Implicitly Restarted Arnoldi Iteration.
 
 
 Sparse Solvers
