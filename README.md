@@ -8,55 +8,12 @@ matrix-toolkits-java
 
 **MTJ** is a high-performance library for developing linear algebra applications.
 
-MTJ is based on [BLAS](http://www.netlib.org/blas) and [LAPACK](http://www.netlib.org/lapack) for its dense and structured sparse computations, and on the [Templates](http://www.netlib.org/templates) project for unstructured sparse operations.
+See [matrix-toolkits-java](https://guthub.com/fommil/matrix-toolkits-java) for the original library.
 
-MTJ uses the [`netlib-java`](https://github.com/fommil/netlib-java/) project as a backend,
-which will automatically use machine-optimised natives, if they are available. Please read the [`netlib-java` documentation](https://github.com/fommil/netlib-java/) for the extra steps needed to ensure that you are getting the best performance for your system.
-
-For more details on high performance linear algebra on the JVM, please watch [my talk at Scala eXchange 2014](https://skillsmatter.com/skillscasts/5849-high-performance-linear-algebra-in-scala) ([follow along with high-res slides](http://fommil.github.io/scalax14/#/)).
-
-
-Performance to Other Libraries
-==============================
-
-The [java-matrix-benchmark](https://github.com/fommil/matrix-toolkits-java/issues/33) clearly shows MTJ to be the most performant Java library for large matrices:
-
-![Relative Performance](http://i752.photobucket.com/albums/xx162/fommil/summary_stacked_area_zps13e5b28c.png)
-
-[A more complete breakdown is available](http://code.google.com/p/java-matrix-benchmark/wiki/RuntimeCorei7v2600_2013_10): MTJ with system optimised natives wins almost every benchmark.
-
-We recommend [common-math](http://commons.apache.org/proper/commons-math/) for small matrix requirements as it provides a large variety of mathematics features, and [EJML](http://code.google.com/p/efficient-java-matrix-library/) if performance on small matrices is more important than features.
-
-Sparse Storage
-==============
-
-A variety of sparse matrix / vector storage classes are available:
-
-* [`CompColMatrix`](src/main/java/no/uib/cipr/matrix/sparse/CompColMatrix.java)
-* [`CompDiagMatrix`](src/main/java/no/uib/cipr/matrix/sparse/CompDiagMatrix.java)
-* [`CompRowMatrix`](src/main/java/no/uib/cipr/matrix/sparse/CompRowMatrix.java)
-* [`FlexCompColMatrix`](src/main/java/no/uib/cipr/matrix/sparse/FlexCompColMatrix.java)
-* [`FlexCompRowMatrix`](src/main/java/no/uib/cipr/matrix/sparse/FlexCompRowMatrix.java)
-* [`UnitLowerCompRowMatrix`](src/main/java/no/uib/cipr/matrix/sparse/UnitLowerCompRowMatrix.java)
-* [`UpperCompRowMatrix`](src/main/java/no/uib/cipr/matrix/sparse/UpperCompRowMatrix.java)
-* [`SparseVector`](src/main/java/no/uib/cipr/matrix/sparse/SparseVector.java)
-* [`LinkedSparseMatrix`](src/main/java/no/uib/cipr/matrix/sparse/LinkedSparseMatrix.java)
-
-The `LinkedSparseMatrix` storage type is a novel storage type developed under this project. It maintains two tail links, one for the next matrix element by row order and another by column order. Lookups are kept into each row and column, making multiplication and transpose multiplication very fast.
-
-The following charts compare the `LinkedSparseMatrix` against `DenseMatrix` for increasing matrix size (`n x n`) and number of non-zero elements, `m`. Rainbow lines indicate  `m` varied from `10,000` to `100,000`. Solid lines are for dense matrix, dashed lines are the sparse matrix.
-
-The following is time to initialise the matrix:
-
-![init](http://i752.photobucket.com/albums/xx162/fommil/init_zpsca3b0937.png)
-
-The following is the memory consumption:
-
-![mem](http://i752.photobucket.com/albums/xx162/fommil/mem_zps3ad2fa94.png)
-
-The following is the time to perform a multiplication with a dense matrix and output into a dense matrix:
-
-![mult](http://i752.photobucket.com/albums/xx162/fommil/mult_zpscf2e6ba8.png)
+This fork is just a minor extension to cover the case of *general* matrices.
+The symmetric case was already covered in [ArpackSym](src/main/java/no/uib/cipr/matrix/sparse/ArpackSym.java).
+The new class is [ArpackGen](src/main/java/no/uib/cipr/matrix/sparse/ArpackGen.java).
+It uses [ARPACK](http://www.caam.rice.edu/software/ARPACK/)'s [dnaupd](http://www.caam.rice.edu/software/ARPACK/UG/node137.html) and dneupd routines forthe Implicitly Restarted Arnoldi Iteration.
 
 
 Sparse Solvers
