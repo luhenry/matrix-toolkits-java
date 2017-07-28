@@ -8,7 +8,7 @@ matrix-toolkits-java
 
 **MTJ** is a high-performance library for developing linear algebra applications.
 
-See [matrix-toolkits-java](https://guthub.com/fommil/matrix-toolkits-java) for the original library.
+See [matrix-toolkits-java](https://github.com/fommil/matrix-toolkits-java) for the original library.
 
 This fork is just a minor extension to cover the case of *general* matrices.
 The symmetric case was already covered in [ArpackSym](src/main/java/no/uib/cipr/matrix/sparse/ArpackSym.java).
@@ -36,7 +36,8 @@ Legal
 History
 =======
 
-This project was originally written by Bjørn-Ove Heimsund and extended/meintained by Samuel Halliday, who has taken a step back due to other commitments.
+This project was originally written by Bjørn-Ove Heimsund, who has taken a step back due to other commitments.
+The original project [matrix-toolkits-java](https://github.com/fommil/matrix-toolkits-java) is maintained by Samuel Halliday.
 
 
 Installation
