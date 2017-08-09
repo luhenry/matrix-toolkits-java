@@ -25,7 +25,7 @@
 
     <groupId>io.github.andreas-solti.matrix-toolkits-java</groupId>
     <artifactId>mtj</artifactId>
-    <version>1.0.6-SNAPSHOT</version>
+    <version>Y</version>
     <packaging>jar</packaging>
 
     <name>matrix-toolkits-java</name>
