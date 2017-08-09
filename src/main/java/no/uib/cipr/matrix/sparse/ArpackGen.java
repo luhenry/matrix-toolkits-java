@@ -59,8 +59,14 @@ public class ArpackGen {
 
     private final ARPACK arpack = ARPACK.getInstance();
 
-    private static final double TOLERANCE = 0.00001;
-    private static final int MAX_ITERATIONS = 10000;
+    /**
+     * The tolerance at which the iterations are allowed to stop
+     */
+    public static double tolerance = 0.00001;
+    /**
+     * The maximum iterations allowed to perform until we decide that convergence is not attained.
+     */
+    public static int maxIterations = 10000;
 
     private final Matrix matrix;
 
@@ -89,7 +95,7 @@ public class ArpackGen {
      * @return a map from eigenvalues to corresponding eigenvectors.
      */
     public Map<Double, DenseVectorSub> solve(int eigenvalues, Ritz ritz) {
-        return solve(eigenvalues, ritz, TOLERANCE);
+        return solve(eigenvalues, ritz, tolerance);
     }
 
     /**
@@ -146,7 +152,7 @@ public class ArpackGen {
         intW info = new intW(0);
         int[] iparam = new int[11];
         iparam[0] = 1;
-        iparam[2] = Math.max(MAX_ITERATIONS, n); // maximum number of Arnoldi update operations allowed (default = 300?)
+        iparam[2] = Math.max(maxIterations, n); // maximum number of Arnoldi update operations allowed (default = 300?)
         iparam[4] = 1; // IPARAM(4) = NB: blocksize to be used in the recurrence. The code currently works only for NB = 1.
         iparam[6] = 1; // No longer referenced. Implicit restarting is ALWAYS used.
         iparam[7] = 1; // MODE On INPUT determines what type of eigenproblem is being solved. Must be 1,2,3,4; See under \Description of dnaupd  for the four modes available. (Mode 1:  A*x = lambda*x)
@@ -199,7 +205,7 @@ public class ArpackGen {
         }
         if (info.val == 1){
             // not converged in max num of iterations!
-            log.info("Maximum number ("+MAX_ITERATIONS+") taken. "+iparam[5]+" converged Ritz values.");
+            log.info("Maximum number ("+iparam[2]+") taken. "+iparam[5]+" converged Ritz values.");
         }
         double[] dr = new double[nev.val+1];
         double[] di = java.util.Arrays.copyOf(dr,dr.length);
