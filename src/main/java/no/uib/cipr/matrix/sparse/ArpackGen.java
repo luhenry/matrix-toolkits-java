@@ -122,7 +122,7 @@ public class ArpackGen {
      * @param tolerance
      * @param ncvModification
      *    At present there is no a-priori analysis to guide the selection
-     *    of NCV relative to NEV.  The only formal requrement is that NCV > NEV + 2.
+     *    of NCV relative to NEV.  The only formal requirement is that NCV > NEV + 2.
      *    However, it is recommended that NCV .ge. 2*NEV+1.  If many problems of
      *    the same type are to be solved, one should experiment with increasing
      *    NCV while keeping NEV fixed for a given test problem.  This will
@@ -246,14 +246,10 @@ public class ArpackGen {
 //        }
 
         for (i = 0; i < computed; i++) {
-            if (new Double(di[i]).compareTo(0.0) == 0) { // ignore complex solutions
-                double eigenvalue = dr[i];
-                DenseVectorSub eigenvector = new DenseVectorSub(eigenvectors,
-                        i * n, n);
-                solution.put(eigenvalue, eigenvector);
-            }
+            double eigenvalue = Math.sqrt(Math.pow(dr[i],2) + Math.pow(di[i],2)); // take the length of the complex value
+            DenseVectorSub eigenvector = new DenseVectorSub(eigenvectors,i * n, n);
+            solution.put(eigenvalue, eigenvector);
         }
-
 
         return solution;
     }
