@@ -63,6 +63,9 @@ public class ArpackGen {
      * The tolerance at which the iterations are allowed to stop
      */
     public static double tolerance = 0.00001;
+
+    public static double convergedTolerance = 1;
+
     /**
      * The maximum iterations allowed to perform until we decide that convergence is not attained.
      */
@@ -149,6 +152,8 @@ public class ArpackGen {
         String bmat = "I";
         String which = ritz.name();
         doubleW tol = new doubleW(tolerance);
+        convergedTolerance = tolerance;
+
         intW info = new intW(0);
         int[] iparam = new int[11];
         iparam[0] = 1;
@@ -180,6 +185,7 @@ public class ArpackGen {
                 } else {
                     // did not converge: Try lowering the accuracy:
                     tol.val = tol.val * 10;
+                    convergedTolerance = tol.val;
                     log.info("New reduced tolerance: "+tol.val);
                     return solve(eigenvalues, ritz, tol.val, ncvModification);
                 }
