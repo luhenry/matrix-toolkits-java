@@ -3,9 +3,11 @@ package no.uib.cipr.matrix;
 import java.util.Arrays;
 
 /**
+ * <p>
  * Wraps a DenseVector, allowing easy access to a sub array of the original
  * without taking copies.
- * <p/>
+ * </p>
+ *
  * It should be possible to utilise BLAS / LAPACK in various matrix classes.
  * However, as it would be a mammoth task, it will be done on an as-needed
  * basis.

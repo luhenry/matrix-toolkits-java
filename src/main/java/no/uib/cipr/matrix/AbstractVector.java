@@ -45,7 +45,7 @@ import java.util.Iterator;
  * <p>
  * Finally, a default iterator is provided by this class, which works by calling
  * the <code>get</code> function. A tailored replacement should be used by
- * subclasses. </ul>
+ * subclasses. </p>
  */
 public abstract class AbstractVector implements Vector, Serializable {
 

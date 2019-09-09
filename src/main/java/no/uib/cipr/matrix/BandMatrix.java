@@ -31,8 +31,8 @@ import org.netlib.util.intW;
  * of direct computations, however it should only be used if the band is
  * sufficiently narrow as wide bands actually wastes both memory and compute
  * time. The matrix
- * <p>
  * <table border="1">
+ * <caption></caption>
  * <tr>
  * <td>a<sub>11</sub></td>
  * <td>a<sub>12</sub></td>
@@ -69,13 +69,12 @@ import org.netlib.util.intW;
  * <td>a<sub>55</sub></td>
  * </tr>
  * </table>
- * </p>
  * <p>
  * has two lower diagonals and one upper diagonal. It will be stored in the
  * array
  * </p>
- * <p>
  * <table border="1">
+ * <caption></caption>
  * <tr>
  * <td>&nbsp;</td>
  * <td>a<sub>11</sub></td>
@@ -99,7 +98,6 @@ import org.netlib.util.intW;
  * <td>&nbsp;</td>
  * </tr>
  * </table>
- * </p>
  * <p>
  * Empty cells are allocated, but never referenced.
  * </p>

@@ -33,7 +33,7 @@ public class SparseEigenvalueTest  {
      */
     @Before
     public void setUp() throws Exception {
-        random = new Random();
+        random = new Random(43);
 
         A = createRandomMatrix(MIN_MATRIX_DIMENSION, MAX_MATRIX_DIMENSION, 5);
     }
@@ -88,7 +88,7 @@ public class SparseEigenvalueTest  {
     private void testLargestEigenvalue(CompColMatrix matrix) {
         ArpackGen generalSolver = new ArpackGen(matrix);
         generalSolver.setComputeOnlyEigenvalues(true);
-        Map<Double, DenseVectorSub> eigenValueMap = generalSolver.solve(3, ArpackGen.Ritz.LR);
+        Map<Double, DenseVectorSub> eigenValueMap = generalSolver.solve(2, ArpackGen.Ritz.LR);
 
         RealMatrix commonsA = new Array2DRowRealMatrix(matrix.numRows(), matrix.numColumns());
         double[] data = matrix.getData();
@@ -158,6 +158,7 @@ public class SparseEigenvalueTest  {
         int successCount = 0;
         int iteration = 0;
         DescriptiveStatistics errors = new DescriptiveStatistics();
+        random.setSeed(123);
         for (iteration = 0; iteration < 50; iteration++){
             CompColMatrix m = createRandomMatrix(dim+iteration,dim+iteration,5);
             try {

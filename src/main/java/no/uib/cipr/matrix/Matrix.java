@@ -25,7 +25,7 @@ package no.uib.cipr.matrix;
  * array, and it is used alongside <code>Vector</code> in numerical
  * computations. Implementing classes decides on the actual storage.
  * 
- * <h4>Basic operations</h4>
+ * <h1>Basic operations</h1>
  * <p>
  * Use <code>numRows</code> and <code>numColumns</code> to get the basic size of
  * a matrix. <code>get(int,int)</code> gets an element, and there are
@@ -43,7 +43,7 @@ package no.uib.cipr.matrix;
  * same contents as the current matrix.
  * </p>
  * 
- * <h4>Iterators</h4>
+ * <h1>Iterators</h1>
  * <p>
  * The matrix interface extends <code>Iterable</code>, and the iterator returns
  * a <code>MatrixEntry</code> which contains current index and entry value. Note
@@ -52,7 +52,7 @@ package no.uib.cipr.matrix;
  * values in the matrix, however only non-zero entries can be changed.
  * </p>
  * 
- * <h4>Basic linear algebra</h4>
+ * <h1>Basic linear algebra</h1>
  * <p>
  * A large selection of basic linear algebra operations are available. To ensure
  * high efficiency, little or no internal memory allocation is done, and the
