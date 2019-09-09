@@ -25,7 +25,7 @@
 
     <groupId>io.github.andreas-solti.matrix-toolkits-java</groupId>
     <artifactId>mtj</artifactId>
-    <version>1.0.8-SNAPSHOT</version>
+    <version>1.0.8</version>
     <packaging>jar</packaging>
 
     <name>matrix-toolkits-java</name>
@@ -88,6 +88,26 @@
 
     <profiles>
         <profile>
+          <id>java12+</id>
+          <activation>
+            <jdk>[12,)</jdk>
+          </activation>
+          <properties>
+            <!-- currently fails with "javadoc: error - The code being documented uses modules but the packages defined
+            in https://docs.oracle.com/javase/8/docs/api/ are in the unnamed module." -->
+            <maven.javadoc.skip>true</maven.javadoc.skip>
+          </properties>
+        </profile>
+        <profile>
+            <id>java8-doclint-disabled</id>
+            <activation>
+                <jdk>[1.8,)</jdk>
+            </activation>
+            <properties>
+                <javadoc.opts>-Xdoclint:none</javadoc.opts>
+            </properties>
+        </profile>
+        <profile>
             <id>src</id>
             <build>
                 <plugins>
@@ -115,9 +135,14 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.1.1</version>
                         <configuration>
                             <failOnError>false</failOnError>
-                            <additionalparam>-Xdoclint:none</additionalparam>
+                            <source>8</source>
+                            <doclint>none</doclint>
+                            <additionalOptions>
+                                <additionalOption>-Xdoclint:none</additionalOption>
+                            </additionalOptions>
                         </configuration>
                         <executions>
                             <execution>
@@ -168,7 +193,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.4</version>
+            <version>1.16.22</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
