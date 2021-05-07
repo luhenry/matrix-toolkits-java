@@ -20,7 +20,7 @@ import java.util.Iterator;
  * {@code O(z / m)} insertion / lookup cost and an iterator that traverses
  * columns then rows: a good fit for unstructured sparse matrices. A secondary
  * link maintains fast transpose iteration.
- * <p/>
+ *
  * However, memory requirements (
  * {@code 1 instance (8 bytes), 2 int (16 bytes), 2 ref (16 bytes), 1 double (8 bytes) = 48 bytes}
  * per matrix element, plus {@code 8 x numcol + 8 x numrow bytes}s for the

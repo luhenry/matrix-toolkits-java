@@ -27,7 +27,7 @@ import java.io.Serializable;
  * used alongside <code>Matrix</code> in numerical computations. Implementing
  * classes decides on the actual storage.
  * 
- * <h4>Basic operations</h4>
+ * <h1>Basic operations</h1>
  * <p>
  * Use <code>size</code> to get the vector size. <code>get(int)</code> gets an
  * element, and there are corresponding <code>set(int,double)</code> and
@@ -42,7 +42,7 @@ import java.io.Serializable;
  * deep copy of the vector. This copy has separate storage, but starts with the
  * same contents as the current vector.
  * </p>
- * <h4>Iterators</h4>
+ * <h1>Iterators</h1>
  * <p>
  * The vector interface extends <code>Iterable</code>, and the iterator returns
  * a <code>VectorEntry</code> which contains current index and entry value. Note
@@ -50,7 +50,7 @@ import java.io.Serializable;
  * and efficient algorithms can be created. The iterator also permits changing
  * values in the vector, however only non-zero entries can be changed.
  * </p>
- * <h4>Basic linear algebra</h4>
+ * <h1>Basic linear algebra</h1>
  * <p>
  * A selection of basic linear algebra operations are available. To ensure high
  * efficiency, little or no internal memory allocation is done, and the user is

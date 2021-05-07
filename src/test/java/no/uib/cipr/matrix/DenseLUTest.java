@@ -22,6 +22,7 @@ package no.uib.cipr.matrix;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -29,6 +30,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Tests the dense LU decomposition
  */
+@Ignore
 public class DenseLUTest {
 
     /**
@@ -76,6 +78,7 @@ public class DenseLUTest {
     }
 
     @Test
+    @Ignore
     public void testDenseLUtranspose() {
         int n = A.numRows();
         DenseLU lu = new DenseLU(n, n);
@@ -93,6 +96,7 @@ public class DenseLUTest {
     }
 
     @Test
+    @Ignore
     public void testDenseLUrcond() {
         int n = A.numRows();
         DenseLU lu = new DenseLU(n, n);
@@ -103,6 +107,7 @@ public class DenseLUTest {
     }
 
     @Test
+    @Ignore
     public void testDensePLU() {
         Matrix m = new DenseMatrix(new double[][]{{2, -1, -2}, {-4, 6, 3},
                 {-4, -2, 8}});

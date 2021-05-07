@@ -25,8 +25,8 @@ package no.uib.cipr.matrix;
  * {@link no.uib.cipr.matrix.LowerTriangDenseMatrix LowerTriangDenseMatrix},
  * this matrix exploits the sparsity by only storing about half the matrix. As
  * such, the triangular matrix
- * <p>
  * <table border="1">
+ * <caption></caption>
  * <tr>
  * <td>a<sub>11</sub></td>
  * <td>&nbsp;</td>
@@ -52,12 +52,12 @@ package no.uib.cipr.matrix;
  * <td>a<sub>44</sub></td>
  * </tr>
  * </table>
- * </p>
  * <p>
  * is packed as follows:
  * </p>
  * <p>
  * <table border="1">
+ * <caption></caption>
  * <tr>
  * <td>a<sub>11</sub></td>
  * <td>a<sub>21</sub></td>
@@ -71,7 +71,6 @@ package no.uib.cipr.matrix;
  * <td>a<sub>44</sub></td>
  * </tr>
  * </table>
- * </p>
  */
 public class LowerTriangPackMatrix extends AbstractTriangPackMatrix {
 

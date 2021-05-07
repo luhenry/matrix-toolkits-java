@@ -86,12 +86,12 @@ public abstract class VectorTestAbstract {
     }
 
     @Test
-    public void testSize() {
+    public void testSize() throws Exception  {
         assertEquals(xd.length, x.size());
     }
 
     @Test
-    public void testCopy() {
+    public void testCopy() throws Exception {
         Vector y = x.copy();
         assertVectorEquals(xd, y);
         y.scale(Math.random());
@@ -99,23 +99,23 @@ public abstract class VectorTestAbstract {
     }
 
     @Test
-    public void testZero() {
+    public void testZero() throws Exception {
         assertVectorEquals(scale(0), x.zero());
     }
 
     @Test
-    public void testScale() {
+    public void testScale() throws Exception {
         double alpha = Math.random();
         assertVectorEquals(scale(alpha), x.scale(alpha));
     }
 
     @Test
-    public void testScaleZero() {
+    public void testScaleZero() throws Exception  {
         assertVectorEquals(scale(0), x.scale(0));
     }
 
     @Test
-    public void testScaleOne() {
+    public void testScaleOne() throws Exception  {
         assertVectorEquals(scale(1), x.scale(1));
     }
 
@@ -129,7 +129,7 @@ public abstract class VectorTestAbstract {
      * Test for Vector set(Vector)
      */
     @Test
-    public void testSetVectorDense() {
+    public void testSetVectorDense() throws Exception  {
         assertVectorEquals(set(1, yd, 0, zd), x.set(yDense));
     }
 
@@ -137,7 +137,7 @@ public abstract class VectorTestAbstract {
      * Test for Vector set(double, Vector)
      */
     @Test
-    public void testSetdoubleVectorDense() {
+    public void testSetdoubleVectorDense() throws Exception {
         double alpha = Math.random();
         assertVectorEquals(set(alpha, yd, 0, zd), x.set(alpha, yDense));
     }
@@ -146,7 +146,7 @@ public abstract class VectorTestAbstract {
      * Test for Vector set(Vector)
      */
     @Test
-    public void testSetVector() {
+    public void testSetVector() throws Exception  {
         assertVectorEquals(set(1, yd, 0, zd), x.set(y));
     }
 
@@ -154,7 +154,7 @@ public abstract class VectorTestAbstract {
      * Test for Vector set(double, Vector)
      */
     @Test
-    public void testSetDoubleVector() {
+    public void testSetDoubleVector() throws Exception {
         double alpha = Math.random();
         assertVectorEquals(set(alpha, yd, 0, zd), x.set(alpha, y));
     }
@@ -169,7 +169,7 @@ public abstract class VectorTestAbstract {
      * Test for Vector add(double, Vector)
      */
     @Test
-    public void testAddDoubleVectorDense() {
+    public void testAddDoubleVectorDense() throws Exception {
         double alpha = Math.random();
         assertVectorEquals(add(alpha, yd), x.add(alpha, yDense));
     }
@@ -178,7 +178,7 @@ public abstract class VectorTestAbstract {
      * Test for Vector add(Vector)
      */
     @Test
-    public void testAddVectorDense() {
+    public void testAddVectorDense() throws Exception {
         assertVectorEquals(add(1, yd), x.add(yDense));
     }
 
@@ -186,7 +186,7 @@ public abstract class VectorTestAbstract {
      * Test for Vector add(double, Vector)
      */
     @Test
-    public void testAddDoubleVector() {
+    public void testAddDoubleVector() throws Exception {
         double alpha = Math.random();
         assertVectorEquals(add(alpha, yd), x.add(alpha, y));
     }
@@ -195,7 +195,7 @@ public abstract class VectorTestAbstract {
      * Test for Vector add(Vector)
      */
     @Test
-    public void testAddVector() {
+    public void testAddVector() throws Exception  {
         assertVectorEquals(add(1, yd), x.add(y));
     }
 
@@ -206,14 +206,14 @@ public abstract class VectorTestAbstract {
     }
 
     @Test
-    public void testDotDense() {
+    public void testDotDense() throws Exception {
         assertEquals(dot(yd), x.dot(yDense), tol);
         assertVectorEquals(xd, x);
         assertVectorEquals(yd, yDense);
     }
 
     @Test
-    public void testDot() {
+    public void testDot() throws Exception {
         assertEquals(dot(yd), x.dot(y), tol);
         assertVectorEquals(xd, x);
         assertVectorEquals(yd, y);
@@ -227,7 +227,7 @@ public abstract class VectorTestAbstract {
     }
 
     @Test
-    public void testCardinality() {
+    public void testCardinality() throws Exception  {
         assertEquals(cardinality(), Matrices.cardinality(x));
     }
 
@@ -240,17 +240,17 @@ public abstract class VectorTestAbstract {
     }
 
     @Test
-    public void testNorm1() {
+    public void testNorm1() throws Exception {
         assertEquals(norm1(), x.norm(Norm.One), tol);
     }
 
     @Test
-    public void testNorm2() {
+    public void testNorm2() throws Exception {
         assertEquals(norm2(), x.norm(Norm.Two), tol);
     }
 
     @Test
-    public void testNormInf() {
+    public void testNormInf() throws Exception {
         assertEquals(normInf(), x.norm(Norm.Infinity), tol);
     }
 
@@ -276,7 +276,7 @@ public abstract class VectorTestAbstract {
     }
 
     @Test
-    public void testIteratorSetGet() {
+    public void testIteratorSetGet() throws Exception {
         double alpha = Math.random();
         double[] data = new double[x.size()];
         for (VectorEntry e : x) {
@@ -289,7 +289,7 @@ public abstract class VectorTestAbstract {
     }
 
     @Test
-    public void testIteratorGet() {
+    public void testIteratorGet() throws Exception {
         double[] data = new double[x.size()];
         for (VectorEntry e : x)
             data[e.index()] = e.get();
@@ -298,7 +298,7 @@ public abstract class VectorTestAbstract {
     }
 
     @Test
-    public void testIteratorSet() {
+    public void testIteratorSet() throws Exception {
         double alpha = Math.random();
         for (VectorEntry e : x)
             e.set(alpha * e.get());

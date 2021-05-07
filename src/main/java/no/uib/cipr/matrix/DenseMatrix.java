@@ -33,8 +33,8 @@ import org.netlib.util.intW;
 /**
  * Dense matrix. It is a good all-round matrix structure, with fast access and
  * efficient algebraic operations. The matrix
- * <p>
  * <table border="1">
+ *     <caption></caption>
  * <tr>
  * <td>a<sub>11</sub></td>
  * <td>a<sub>12</sub></td>
@@ -60,12 +60,12 @@ import org.netlib.util.intW;
  * <td>a<sub>44</sub></td>
  * </tr>
  * </table>
- * </p>
+ *
  * <p>
  * is stored column major in a single array, as follows:
  * </p>
- * <p>
  * <table border="1">
+ *     <caption></caption>
  * <tr>
  * <td>a<sub>11</sub></td>
  * <td>a<sub>21</sub></td>
@@ -85,7 +85,6 @@ import org.netlib.util.intW;
  * <td>a<sub>44</sub></td>
  * </tr>
  * </table>
- * </p>
  */
 public class DenseMatrix extends AbstractDenseMatrix {
 

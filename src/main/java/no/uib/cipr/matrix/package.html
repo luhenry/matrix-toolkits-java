@@ -11,24 +11,23 @@
 				 Linear algebra vector.</li>
 			</ul>
 			</li>
-			<li><strong>Matrix and vector implementations</strong>
-			<ul>
+			<li><strong>Matrix and vector implementations</strong></li>
 
 			<li><a href="DenseVector.html">DenseVector</a> -
 			 Stores the vector in a dense array.</li>
-			</li>
 
 			<li><strong>Dense matrices</strong> - Stores the data columnwise in a linear array.
-			<ul>
-				<li><a href="DenseMatrix.html">DenseMatrix</a> -
-				 Recommended matrix for general cases.</li>
-				<li><strong>{Lower,Upper}{Symm,SPD}DenseMatrix</strong> -
-				 Assumes implicit symmetry, and that the matrix is positive definite (SPD).
-				 Stores entries in either the upper or lower triangular part.</li>
-				<li><strong>[Unit]{Lower,Upper}TriangDenseMatrix</strong> -
-				 Only stores in the lower or upper triangular part, and assumes the rest is zero.
-				 If the matrix is unit, the main diagonal is implicitly assumes to be one.</li>
-			</ul></li>
+				<ul>
+					<li><a href="DenseMatrix.html">DenseMatrix</a> -
+					 Recommended matrix for general cases.</li>
+					<li><strong>{Lower,Upper}{Symm,SPD}DenseMatrix</strong> -
+					 Assumes implicit symmetry, and that the matrix is positive definite (SPD).
+					 Stores entries in either the upper or lower triangular part.</li>
+					<li><strong>[Unit]{Lower,Upper}TriangDenseMatrix</strong> -
+					 Only stores in the lower or upper triangular part, and assumes the rest is zero.
+					 If the matrix is unit, the main diagonal is implicitly assumes to be one.</li>
+				</ul>
+			</li>
 
 			<li><strong>Packed matrices</strong> - Stores either the lower or upper triangular part of the matrix.
 			<ul>
@@ -39,25 +38,25 @@
 			</ul></li>
 
 			<li><strong>Banded matrices</strong> - Stores the matrix in a dense band.
-			<ul>
-				<li><a href="BandMatrix.html">BandMatrix</a> -
-				 General band matrix with the possibility of different upper and lower triangular bandwidths.</li>
-				<li><strong>{Lower,Upper}{Symm,SPD}BandMatrix</strong> -
-				 Like their dense counterparts, but consumes less memory by only storing the lower or upper parts.</li>
-				<li><strong>[Unit]{Lower,Upper}TriangBandMatrix</strong> -
-				 Also like their dense counterparts, but consumes less memory by only storing the lower or upper parts..</li>
-			</ul></li>
+				<ul>
+					<li><a href="BandMatrix.html">BandMatrix</a> -
+					 General band matrix with the possibility of different upper and lower triangular bandwidths.</li>
+					<li><strong>{Lower,Upper}{Symm,SPD}BandMatrix</strong> -
+					 Like their dense counterparts, but consumes less memory by only storing the lower or upper parts.</li>
+					<li><strong>[Unit]{Lower,Upper}TriangBandMatrix</strong> -
+					 Also like their dense counterparts, but consumes less memory by only storing the lower or upper parts..</li>
+				</ul>
+			</li>
 
 			<li><strong>Tridiagonal matrices</strong> - Stores just three diagonals.
-			<ul>
-				<li><a href="TridiagMatrix.html">TridiagMatrix</a> -
-				 Standard tridiagonal matrix.</li>
-				<li><strong>{Symm,SPD}TridiagMatrix</strong> -
-				 Stores only the main diagonal and an off-diagonal.
-				 May also assume that the matrix is positive definite.</li>
-			</ul></li>
-
-			</ul></li>
+				<ul>
+					<li><a href="TridiagMatrix.html">TridiagMatrix</a> -
+					 Standard tridiagonal matrix.</li>
+					<li><strong>{Symm,SPD}TridiagMatrix</strong> -
+					 Stores only the main diagonal and an off-diagonal.
+					 May also assume that the matrix is positive definite.</li>
+				</ul>
+			</li>
 
 			<li><strong>Abstract implementations</strong>
 			<ul>
