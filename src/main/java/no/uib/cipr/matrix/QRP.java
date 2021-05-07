@@ -19,7 +19,7 @@
  */
 package no.uib.cipr.matrix;
 
-import com.github.fommil.netlib.LAPACK;
+import dev.ludovic.netlib.LAPACK;
 import org.netlib.util.intW;
 
 /**

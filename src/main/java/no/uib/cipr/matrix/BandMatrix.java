@@ -22,8 +22,8 @@ package no.uib.cipr.matrix;
 
 import java.util.Arrays;
 
-import com.github.fommil.netlib.BLAS;
-import com.github.fommil.netlib.LAPACK;
+import dev.ludovic.netlib.BLAS;
+import dev.ludovic.netlib.LAPACK;
 import org.netlib.util.intW;
 
 /**

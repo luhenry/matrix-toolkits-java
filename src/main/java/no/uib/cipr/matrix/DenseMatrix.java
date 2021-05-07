@@ -26,8 +26,8 @@ import no.uib.cipr.matrix.io.MatrixInfo;
 import no.uib.cipr.matrix.io.MatrixSize;
 import no.uib.cipr.matrix.io.MatrixVectorReader;
 
-import com.github.fommil.netlib.BLAS;
-import com.github.fommil.netlib.LAPACK;
+import dev.ludovic.netlib.BLAS;
+import dev.ludovic.netlib.LAPACK;
 import org.netlib.util.intW;
 
 /**

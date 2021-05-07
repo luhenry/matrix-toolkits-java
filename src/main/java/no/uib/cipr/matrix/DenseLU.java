@@ -20,7 +20,7 @@
 
 package no.uib.cipr.matrix;
 
-import com.github.fommil.netlib.LAPACK;
+import dev.ludovic.netlib.LAPACK;
 import no.uib.cipr.matrix.Matrix.Norm;
 import org.netlib.util.doubleW;
 import org.netlib.util.intW;
