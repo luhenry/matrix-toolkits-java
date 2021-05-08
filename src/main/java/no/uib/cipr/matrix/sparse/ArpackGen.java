@@ -1,6 +1,6 @@
 package no.uib.cipr.matrix.sparse;
 
-import com.github.fommil.netlib.ARPACK;
+import dev.ludovic.netlib.ARPACK;
 import lombok.extern.java.Log;
 import no.uib.cipr.matrix.DenseVector;
 import no.uib.cipr.matrix.DenseVectorSub;
